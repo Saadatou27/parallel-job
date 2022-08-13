@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+    stages {
+        stage ('1-git-clone'){
+            steps {
+            checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-id', url: 'https://github.com/Saadatou27/parallel-job.git']]])
+            }
+        }
+        stage ('2-parallel-job1'){
+            parallel{
+                stage('sub-job-1') {
+                    steps{
+                        sh 'lscpu'
+                        sh 'df -h'
+                        sh 'rpm -qa epel-release'
+                    }
+                }
+
+            }
+        }
+        }
+    }
